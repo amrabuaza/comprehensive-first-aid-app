@@ -15,6 +15,7 @@ function MainNavigation() {
                     name={'Auth'}
                     component={AuthStackNavigator}
                 />
+                
                 {/* <MainStack.Screen
                     name={'App'}
                 /> */}

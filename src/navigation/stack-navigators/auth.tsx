@@ -17,6 +17,11 @@ function AuthStackNavigator() {
                 name={'Login'}
                 component={LoginScreen}
             />
+
+            <AuthStack.Screen
+                name={'Signup'}
+                component={LoginScreen}
+            />
         </AuthStack.Navigator>
     );
 };

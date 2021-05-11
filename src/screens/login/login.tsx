@@ -15,14 +15,18 @@ import {
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // type checking.
+interface Props {
+    navigation: StackNavigationProp<any>;
+};
 interface FormData {
     username: string;
     password: string;
 };
 
-function LoginScreen() {
+function LoginScreen({ navigation }: Props) {
 
     // use react hook form.
     const {
@@ -54,7 +58,8 @@ function LoginScreen() {
      * Handle submit the form result.
      */
     const onSubmit = (payload: FormData) => {
-
+        navigation.navigate('Signup')
+        // navigation.goBack();
     };
     console.log({ errors })
     return (
@@ -94,7 +99,7 @@ function LoginScreen() {
                             {errors.password?.message}
                         </Text>
                     }
-                    
+
                 </View>
 
                 <Button
