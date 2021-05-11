@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
     btn: {
         alignSelf: 'center',
         marginVertical: 8
+    },
+    error: {
+        color: 'red',
+        marginTop: 2,
+        textAlign: 'left'
     }
 });
 
