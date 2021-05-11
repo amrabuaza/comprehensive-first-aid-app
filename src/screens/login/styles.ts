@@ -1,32 +1,29 @@
-/**
- * name: albums/styles.ts
- * desc: The styles of albums screen live here.
- */
-
 import { StyleSheet } from 'react-native';
-import { COLOR } from 'theme';
-import layout from 'theme/layout';
+import {
+    COLOR,
+    LAYOUT
+} from '../../theme';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLOR.CORNFLOWER_BLUE
+        backgroundColor: COLOR.LIGHT
     },
-    album: {
-        flex: 1,
-        height: (layout.windowLayout.height / 4),
-        borderRadius: 8,
-        backgroundColor: COLOR.KOBI,
-        margin: 8,
-        alignItems: 'center',
-        justifyContent: 'space-around'
+    img: {
+        height: LAYOUT.windowLayout.width / 2,
+        width: LAYOUT.windowLayout.width / 2,
+        alignSelf: 'center',
+        marginVertical: 16,
+        borderRadius: 16
     },
-    text: {
-        textAlign: 'center'
+    inputsContainer: {
+        width: '90%',
+        alignSelf: 'center'
+    },
+    btn: {
+        alignSelf: 'center',
+        marginVertical: 8
     }
 });
 
-/**
- * export as default.
- */
 export default styles;
