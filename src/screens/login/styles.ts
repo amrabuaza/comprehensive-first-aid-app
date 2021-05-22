@@ -22,12 +22,27 @@ const styles = StyleSheet.create({
     },
     btn: {
         alignSelf: 'center',
-        marginVertical: 8
+        marginVertical: 8,
+        color: "#fff",
+        backgroundColor: COLOR.RED,
+        borderRadius: 16,
+        marginTop: 32,
+    },
+    btnText: {
+        color: COLOR.LIGHT,
+        fontWeight: "bold"
     },
     error: {
         color: 'red',
         marginTop: 2,
         textAlign: 'left'
+    },
+    link: {
+        textDecorationLine: 'underline',
+        color: COLOR.LINK_COLOR,
+        textAlign: "center",
+        marginTop: 32,
+        fontWeight: "bold"
     }
 });
 

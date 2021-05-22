@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Image,
     View
@@ -16,6 +16,12 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { login } from "../../api";
+import {
+    Loader
+} from '../../components';
+import User from "../../context/user";
+
 
 // type checking.
 interface Props {
@@ -27,6 +33,8 @@ interface FormData {
 };
 
 function LoginScreen({ navigation }: Props) {
+    const [loading, setloading] = useState(false);
+    const { user, handleLogin }: any = useContext(User.Context);
 
     // use react hook form.
     const {
@@ -40,16 +48,17 @@ function LoginScreen({ navigation }: Props) {
         resolver: yupResolver(validation)
     });
 
+    useEffect(() => {
+        if (!user.isGuestUser) {
+            navigation.navigate('App')
+        }
+    }, [])
+
     // register inputs.
     useEffect(
         () => {
             register('username');
             register('password');
-
-            return () => {
-                unregister('username');
-                unregister('password');
-            }
         },
         []
     );
@@ -58,10 +67,17 @@ function LoginScreen({ navigation }: Props) {
      * Handle submit the form result.
      */
     const onSubmit = (payload: FormData) => {
-        navigation.navigate('Signup')
-        // navigation.goBack();
+        setloading(true);
+        login(payload).then((response) => {
+            setloading(false);
+            if (response.kind !== 'OK') {
+                setError('password', { message: 'Username or password is invalid' });
+                return;
+            }
+            handleLogin(response.data);
+            navigation.navigate('App')
+        });
     };
-    console.log({ errors })
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAwareScrollView
@@ -89,6 +105,7 @@ function LoginScreen({ navigation }: Props) {
 
                     <Item error={!!errors.password?.message}>
                         <Input
+                            secureTextEntry={true}
                             onChangeText={(val) => { setValue('password', val) }}
                             placeholder="password"
                         />
@@ -108,9 +125,14 @@ function LoginScreen({ navigation }: Props) {
                     hasText
                     transparent
                 >
-                    <Text>Login</Text>
+                    <Text style={styles.btnText}>Login</Text>
                 </Button>
+
+                <Text style={styles.link} onPress={() => navigation.navigate('Signup')}>
+                    Create your account now
+                        </Text>
             </KeyboardAwareScrollView>
+            {loading && <Loader />}
         </SafeAreaView>
     );
 };
