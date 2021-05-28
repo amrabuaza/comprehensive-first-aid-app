@@ -29,9 +29,7 @@ function Provider({ children }: any) {
         })
     }, [])
 
-    const isParamedic = useCallback(() => {
-        return user && !user.isGuestUser && userType === "paramedic";
-    }, []);
+    const isParamedic = userType === "paramedic";
 
     /**
      * Handle user login
@@ -51,6 +49,8 @@ function Provider({ children }: any) {
      */
     const handleLogout = useCallback(() => {
         setUser(guest);
+        setUserInfo(null);
+        setUserType("user");
         StorageHelper.clearAll();
     }, []);
 

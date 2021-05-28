@@ -98,7 +98,7 @@ function LoginScreen({ navigation }: Props) {
                     {
                         !!errors.username?.message &&
                         <Text style={styles.error} note>
-                            {errors.password?.message}
+                            {errors.username?.message}
                         </Text>
                     }
 
