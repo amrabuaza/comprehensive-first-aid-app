@@ -102,7 +102,7 @@ function SignupScreen({ navigation }: Props) {
     });
 
     useEffect(() => {
-        if (!user.isGuestUser) {
+        if (user && !user.isGuestUser) {
             navigation.navigate('App')
         }
     }, [])
@@ -156,7 +156,7 @@ function SignupScreen({ navigation }: Props) {
                 showsVerticalScrollIndicator={false}
             >
                 <Image
-                    source={{ uri: 'https://img.freepik.com/free-vector/broken-frosted-glass-realistic-icon_1284-12125.jpg?size=338&ext=jpg' }}
+                    source={require('../../assets/paramedic.jpg')}
                     style={styles.img}
                     resizeMode={'contain'}
                 />

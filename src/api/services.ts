@@ -1,7 +1,7 @@
 import * as ApiTypes from './types';
 import getError from './problems';
 import Axios from './instance';
-import { transformInstruction, getNextLink, transformUser, transformParamedicAddress } from "./helpers";
+import { transformInstruction, getNextLink, transformUser, transformParamedicAddress, transformInstructionTag } from "./helpers";
 
 /**
  * Login 
@@ -61,6 +61,31 @@ export async function getInstructions(nextLink?: string): Promise<ApiTypes.GetIn
         }
 
         const instructionsResponse = await Axios.get(targetUrl);
+
+        return {
+            kind: 'OK',
+            instructions: instructionsResponse.data.data.items.map(transformInstruction),
+            nextLink: getNextLink(instructionsResponse)
+        };
+
+    } catch (e) {
+        return {
+            kind: 'REJECTED',
+            error: getError(e.response.status)
+        };
+    };
+};
+
+/**
+ * Get instructions by tags
+ * 
+ * @param tags 
+ * @returns list instructions
+ */
+export async function getInstructionsByTags(tags: any): Promise<ApiTypes.GetInstructions> {
+    try {
+
+        const instructionsResponse = await Axios.get(`instruction/list-by-tags/${tags.join(",")}`);
 
         return {
             kind: 'OK',
@@ -175,7 +200,7 @@ export async function getParamedicAddress(): Promise<ApiTypes.GetParamedicAddres
 
         return {
             kind: 'OK',
-            address: userResponse.data.data ?? transformParamedicAddress(userResponse.data.data)
+            address: userResponse.data.data ? transformParamedicAddress(userResponse.data.data) : null
         };
 
     } catch (e) {
@@ -183,6 +208,51 @@ export async function getParamedicAddress(): Promise<ApiTypes.GetParamedicAddres
             kind: 'REJECTED',
             error: getError(e.response.status),
             errorMessage: e.response.data.message
+        };
+    };
+};
+
+/**
+ * Update or add paramedic address
+ * 
+ * @param addressForm 
+ * @returns 
+ */
+export async function updateParamedicAddress(addressForm: any): Promise<ApiTypes.General> {
+    try {
+        const addressResponse = await Axios.post('paramedic-address/add', addressForm);
+        return {
+            kind: 'OK',
+        };
+
+    } catch (e) {
+        return {
+            kind: 'REJECTED',
+            error: getError(e.response.status),
+            errorMessage: e.response.data.message
+        };
+    };
+}
+
+/**
+ * Get instruction tags
+ * 
+ * @returns list instruction tags
+ */
+export async function getInstructionTags(): Promise<ApiTypes.GetInstructionTags> {
+    try {
+
+        const instructionTagsResponse = await Axios.get("instruction-tag/list");
+
+        return {
+            kind: 'OK',
+            tags: instructionTagsResponse.data.data.items.map(transformInstructionTag),
+        };
+
+    } catch (e) {
+        return {
+            kind: 'REJECTED',
+            error: getError(e.response.status)
         };
     };
 };

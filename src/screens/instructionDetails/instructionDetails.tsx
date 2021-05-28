@@ -5,7 +5,8 @@ import styles from './styles';
 import { getInstructionDetails } from "../../api";
 import { Instruction } from "../../api/models";
 import {
-    Text
+    Text,
+    Button
 } from 'native-base';
 import {
     Loader
@@ -42,24 +43,53 @@ function InstructionDetails({ navigation, route }: Props) {
         let selectedId = route.params.selectedId;
         getInstructionDetails(selectedId).then((response) => {
             if (response.kind === "OK") {
-                console.log(response.instruction);
-
                 setInstructionModel(response.instruction as Instruction);
             }
             setBodyloading(false);
         });
     }, [])
 
+    function handleTriggerVideo() {
+        if (!video) return;
+
+        if (status && status.isPlaying) {
+            video.current.pauseAsync();
+        } else {
+            video.current.playAsync()
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container} >
             <ScrollView>
-                {instructionModel !== null ? (
+                {!bodyLoading && instructionModel !== null ? (
                     <View>
                         <Text style={styles.title}>{instructionModel?.title}</Text>
                         <Text style={styles.description}>
                             <Text style={styles.label}>Description :</Text>
                             {instructionModel?.description}
                         </Text>
+                        <Video
+                            ref={video}
+                            style={styles.video}
+                            source={{
+                                uri: instructionModel?.url || "",
+                            }}
+                            useNativeControls
+                            resizeMode="contain"
+                            isLooping
+                            onPlaybackStatusUpdate={status => setStatus(() => status)}
+                        />
+                        <View style={styles.buttonGroup}>
+                            <Button
+                                onPress={handleTriggerVideo}
+                                style={styles.btn}
+                                hasText
+                                transparent
+                            >
+                                <Text style={styles.btnText}>{status && status.isPlaying ? 'Pause' : 'Play'}</Text>
+                            </Button>
+                        </View>
                         {instructionModel?.steps !== undefined && instructionModel.steps.length ? (
                             <View>
                                 <Text style={styles.label}>Instruction Steps</Text>

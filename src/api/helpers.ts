@@ -1,4 +1,4 @@
-import { Instruction, InstructionStep, User, ParamedicAddress } from "./models";
+import { Instruction, InstructionStep, User, ParamedicAddress, InstructionTag } from "./models";
 
 /**
  * Get next link url form response if exists
@@ -87,10 +87,25 @@ function transformParamedicAddress(row: any) {
     });
 }
 
+/**
+ * Transform tnstruction tag as convert row to Object of type tnstruction tag
+ * 
+ * @param row 
+ * @returns instacne form TnstructionTag model
+ * @see InstructionTag
+ */
+function transformInstructionTag(row: any) {
+    return new InstructionTag({
+        label: row.name,
+        value: row.name
+    });
+}
+
 export {
     transformInstruction,
     transformInstructionStep,
     getNextLink,
     transformUser,
-    transformParamedicAddress
+    transformParamedicAddress,
+    transformInstructionTag
 }

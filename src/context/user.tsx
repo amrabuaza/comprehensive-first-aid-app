@@ -13,7 +13,7 @@ function Provider({ children }: any) {
     const [user, setUser] = useState(guest);
     const [userInfo, setUserInfo] = useState([]);
     const [userType, setUserType] = useState("user");
-    const [isParamedic, setIsParamedic] = useState<boolean>(false);
+    const [userAddress, setUserAddress] = useState();
 
     useEffect(() => {
         StorageHelper.get("@USER").then((response) => {
@@ -29,9 +29,9 @@ function Provider({ children }: any) {
         })
     }, [])
 
-    useEffect(() => {
-        setIsParamedic(!user.isGuestUser && userType === "paramedic");
-    }, [userType])
+    const isParamedic = useCallback(() => {
+        return user && !user.isGuestUser && userType === "paramedic";
+    }, []);
 
     /**
      * Handle user login
@@ -59,6 +59,8 @@ function Provider({ children }: any) {
             value={{
                 user,
                 userInfo,
+                userAddress,
+                setUserAddress,
                 isParamedic,
                 handleSetUserInfo,
                 handleLogin,

@@ -16,10 +16,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import {
     Loader
 } from '../../components';
+import * as Location from 'expo-location';
+import { ParamedicAddress as ParamedicAddressModel } from "../../api/models";
+import { getParamedicAddress, updateParamedicAddress } from "../../api";
 import User from "../../context/user";
-import { User as UserModel } from "../../api/models";
-import { updateUserInfo } from "../../api";
-
 
 // type checking.
 interface Props {
@@ -29,6 +29,7 @@ interface FormData {
     country: string;
     city: string;
     region: string;
+    street_name: string;
     building_number_or_name: string;
     floor_number: string;
     apartment_number: string;
@@ -38,8 +39,8 @@ interface FormData {
 
 function EditParamedicAddress({ navigation }: Props) {
     const [bodyLoading, setBodyloading] = useState(false);
-    const { userInfo, handleSetUserInfo }: any = useContext(User.Context);
-    const [currentUserInfo, setCurrentUserInfo] = useState<UserModel>(userInfo);
+    const { userAddress }: any = useContext(User.Context);
+    const [adress, setAddress] = useState<ParamedicAddressModel>(userAddress);
 
     // validation schema.
     const validation = Yup.object().shape({
@@ -55,22 +56,32 @@ function EditParamedicAddress({ navigation }: Props) {
             .required('Floor number is required'),
         apartment_number: Yup.string()
             .required('Apartment number is required'),
+        street_name: Yup.string()
+            .required('Apartment number is required'),
     });
 
     // use react hook form.
     const {
         setValue,
         register,
-        unregister,
         handleSubmit,
-        setError,
         formState: { errors },
         watch
     } = useForm<FormData>({
         resolver: yupResolver(validation),
+        defaultValues: {
+            country: adress?.country || '',
+            city: adress?.city || '',
+            region: adress?.region || '',
+            street_name: adress?.streetName || '',
+            building_number_or_name: adress?.buildingNumberOrName || '',
+            floor_number: adress?.floorNumber || '',
+            apartment_number: adress?.apartmentNumber || '',
+        }
     });
 
     const model = watch();
+
 
     // register inputs.
     useEffect(
@@ -81,6 +92,7 @@ function EditParamedicAddress({ navigation }: Props) {
             register('building_number_or_name');
             register('floor_number');
             register('apartment_number');
+            register('street_name');
         },
         []
     );
@@ -89,17 +101,20 @@ function EditParamedicAddress({ navigation }: Props) {
      * Handle submit the form result.
      */
     const onSubmit = (payload: FormData) => {
+        payload.latitude = 30.5852;
+        payload.longitude = 36.2384;
         setBodyloading(true);
-        updateUserInfo(payload).then((response) => {
+        updateParamedicAddress(payload).then((response) => {
             if (response.kind !== 'OK') {
                 setBodyloading(false);
                 return;
             }
-            handleSetUserInfo(response.user);
-            navigation.navigate("Profile");
+            navigation.navigate("ParamedicAddress");
         });
-    };
+        // Location.getCurrentPositionAsync().then((response) => {
 
+        // })
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -107,7 +122,7 @@ function EditParamedicAddress({ navigation }: Props) {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.inputsContainer}>
-                    <Text style={styles.label}>country : </Text>
+                    <Text style={styles.label}>Country : </Text>
                     <Item error={!!errors.country?.message}>
                         <Input
                             value={model?.country}
@@ -121,7 +136,7 @@ function EditParamedicAddress({ navigation }: Props) {
                         </Text>
                     }
 
-                    <Text style={styles.label}>city : </Text>
+                    <Text style={styles.label}>City : </Text>
                     <Item error={!!errors.city?.message}>
                         <Input
                             value={model?.city}
@@ -135,7 +150,7 @@ function EditParamedicAddress({ navigation }: Props) {
                         </Text>
                     }
 
-                    <Text style={styles.label}>region : </Text>
+                    <Text style={styles.label}>Region : </Text>
                     <Item error={!!errors.region?.message}>
                         <Input
                             value={model?.region}
@@ -149,7 +164,21 @@ function EditParamedicAddress({ navigation }: Props) {
                         </Text>
                     }
 
-                    <Text style={styles.label}>building_number_or_name : </Text>
+                    <Text style={styles.label}>street name : </Text>
+                    <Item error={!!errors.street_name?.message}>
+                        <Input
+                            value={model?.street_name}
+                            onChangeText={(val) => { setValue('street_name', val) }}
+                        />
+                    </Item>
+                    {
+                        !!errors.street_name?.message &&
+                        <Text style={styles.error} note>
+                            {errors.street_name?.message}
+                        </Text>
+                    }
+
+                    <Text style={styles.label}>Building number or name : </Text>
                     <Item error={!!errors.building_number_or_name?.message}>
                         <Input
                             value={model?.building_number_or_name}
@@ -163,7 +192,7 @@ function EditParamedicAddress({ navigation }: Props) {
                         </Text>
                     }
 
-                    <Text style={styles.label}>floor_number : </Text>
+                    <Text style={styles.label}>Floor number : </Text>
                     <Item error={!!errors.floor_number?.message}>
                         <Input
                             value={model?.floor_number}
@@ -177,7 +206,7 @@ function EditParamedicAddress({ navigation }: Props) {
                         </Text>
                     }
 
-                    <Text style={styles.label}>apartment_number : </Text>
+                    <Text style={styles.label}>Apartment number : </Text>
                     <Item error={!!errors.apartment_number?.message}>
                         <Input
                             value={model?.apartment_number}
@@ -208,7 +237,6 @@ function EditParamedicAddress({ navigation }: Props) {
         </SafeAreaView>
     );
 };
-
 
 
 export default EditParamedicAddress;

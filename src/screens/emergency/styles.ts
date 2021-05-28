@@ -5,42 +5,40 @@ import {
 } from '../../theme';
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
-        backgroundColor: COLOR.TRANSPARENT
+        backgroundColor: COLOR.LIGHT,
+        marginTop: 32
     },
     title: {
         fontWeight: "bold",
         textAlign: "center",
-        fontSize: 32
+        fontSize: 32,
+        color: COLOR.CHARCOAL
     },
-    description: {
-        margin: 16,
-        fontSize: 18
+    infoItem: {
+        margin: 16
     },
     label: {
         fontWeight: "bold",
         textAlign: "center",
-        fontSize: 20
+        fontSize: 20,
+        color: COLOR.CHARCOAL
     },
-    step: {
-        fontWeight: "bold",
-        fontSize: 16,
-        marginLeft: 16,
-        marginBottom: 8
-    },
-    instructionItem: {
-        marginBottom: 16
+    infoItemLabel: {
+        fontSize: 18,
+        color: COLOR.CHARCOAL
     },
     buttonGroup: {
-        marginTop: 46,
-        margin: 16,
+        marginTop: 24,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
     btn: {
+        marginTop: 46,
         color: "#fff",
         backgroundColor: COLOR.RED,
         borderRadius: 16,
@@ -55,10 +53,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center"
     },
-    video: {
+    img: {
+        marginTop: 46,
+        height: LAYOUT.windowLayout.width / 2,
+        width: LAYOUT.windowLayout.width / 2,
         alignSelf: 'center',
-        width: 320,
-        height: 200,
+        marginVertical: 16,
+        borderRadius: 16
     },
 });
 

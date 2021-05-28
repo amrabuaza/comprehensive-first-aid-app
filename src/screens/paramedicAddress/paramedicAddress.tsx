@@ -6,6 +6,7 @@ import { Text, View, Button } from 'native-base';
 import { Loader } from '../../components';
 import { ParamedicAddress as ParamedicAddressModel } from "../../api/models";
 import { getParamedicAddress } from "../../api";
+import User from "../../context/user";
 
 // type checking.
 interface Props {
@@ -21,12 +22,14 @@ interface Props {
 function ParamedicAddress({ navigation }: Props) {
     const [bodyLoading, setBodyloading] = useState(false);
     const [adress, setAddress] = useState<ParamedicAddressModel>();
+    const { setUserAddress }: any = useContext(User.Context);
+
     useEffect(() => {
         setBodyloading(true);
         getParamedicAddress().then((response) => {
-            console.log(response);
             if (response.kind == "OK") {
                 setAddress(response.address as ParamedicAddressModel);
+                setUserAddress(response.address as ParamedicAddressModel);
             }
             setBodyloading(false);
         })

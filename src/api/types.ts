@@ -3,7 +3,7 @@
  * common.
  */
 
-import { Instruction, User, ParamedicAddress } from "./models";
+import { Instruction, User, ParamedicAddress, InstructionTag } from "./models";
 
 type Kind = 'OK' | 'REJECTED';
 
@@ -39,4 +39,10 @@ export interface GetParamedicAddress {
     error?: string;
     address?: ParamedicAddress;
     errorMessage?: any;
+};
+
+export interface GetInstructionTags {
+    kind: Kind;
+    error?: string;
+    tags?: InstructionTag[];
 };

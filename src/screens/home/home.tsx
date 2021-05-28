@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
-import { getInstructions } from "../../api";
-import { Instruction } from "../../api/models";
+import { getInstructions, getInstructionTags, getInstructionsByTags } from "../../api";
+import { Instruction, InstructionTag } from "../../api/models";
 import {
     Loader
 } from '../../components';
@@ -17,6 +17,7 @@ import {
     Button,
     Text
 } from 'native-base';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 // type checking.
 interface Props {
@@ -32,19 +33,37 @@ interface Props {
 function HomeScreen({ navigation }: Props) {
     const [loading, setloading] = useState(false);
     const [instructions, setInstructions] = useState<Instruction[]>([]);
+    const [instructionTags, setInstructionTags] = useState<InstructionTag[]>([]);
     const [nextLink, setNextLink] = useState<string>();
 
+    const [open, setOpen] = useState(false);
+    const [selectedTags, setSeletedTags] = useState([]);
+
     /**
-     * Load instructions
+     * On load need to get instruction tags
      */
     useEffect(() => {
         setloading(true);
-        getInstructions().then((response) => {
-            setInstructions(response.instructions as Instruction[]);
-            setNextLink(response.nextLink);
+        getInstructionTags().then((response) => {
+            setInstructionTags(response.tags as InstructionTag[]);
             setloading(false);
-        });
+        })
     }, [])
+
+    /**
+     * When user select tags need to call api to get instructions by tags
+     */
+    useEffect(() => {
+        setOpen(false);
+        if (selectedTags) {
+            setloading(true);
+            getInstructionsByTags(selectedTags).then((response) => {
+                setInstructions(response.instructions as Instruction[]);
+                setNextLink(response.nextLink);
+                setloading(false);
+            })
+        }
+    }, [selectedTags])
 
     /**
      * handle show instruction details by id
@@ -72,6 +91,19 @@ function HomeScreen({ navigation }: Props) {
     return (
         <SafeAreaView style={styles.container} >
             <Text style={styles.title}>Instructions</Text>
+            <DropDownPicker
+                style={styles.row}
+                customItemContainerStyle={styles.containerStyle}
+                multiple={true}
+                open={open}
+                value={selectedTags}
+                items={instructionTags}
+                setOpen={setOpen}
+                setValue={setSeletedTags}
+                placeholder="Select instruction tags"
+                searchable={true}
+                multipleText={selectedTags.join(",")}
+            />
             <ScrollView>
                 {instructions.map((row, i) => {
                     return (
@@ -80,8 +112,8 @@ function HomeScreen({ navigation }: Props) {
                             key={i}
                             onPress={() => handleShowInstructionDetails(row.id)}
                         >
-                            <View  >
-                                <Card>
+                            <View >
+                                <Card containerStyle={styles.card} >
                                     <Card.Title style={styles.instructionTitle}>{row.title}</Card.Title>
                                     <Card.Divider />
                                     <Text>

@@ -46,56 +46,60 @@ function Profile({ navigation }: Props) {
     return (
         <SafeAreaView style={styles.container} >
             <View>
-                <Text style={styles.title}>
-                    User Profile
+                {currentUserInfo ? (
+                    <View>
+                        <Text style={styles.title}>
+                            User Profile
                 </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        Username :
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                Username :
                     </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.username}
-                    </Text>
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.username}
+                            </Text>
+                        </Text>
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                First Name :
                 </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        First Name :
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.firstName}
+                            </Text>
+                        </Text>
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                Last Name :  </Text>
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.lastName}
+                            </Text>
+                        </Text>
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                Email :
                 </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.firstName}
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.email}
+                            </Text>
+                        </Text>
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                Phone Number :
                     </Text>
-                </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        Last Name :  </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.lastName}
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.phoneNumber}
+                            </Text>
+                        </Text>
+                        <Text style={styles.infoItem}>
+                            <Text style={styles.label}>
+                                Created At :
                     </Text>
-                </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        Email :
-                </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.email}
-                    </Text>
-                </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        Phone Number :
-                    </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.phoneNumber}
-                    </Text>
-                </Text>
-                <Text style={styles.infoItem}>
-                    <Text style={styles.label}>
-                        Created At :
-                    </Text>
-                    <Text style={styles.infoItemLabel}>
-                        {currentUserInfo.createdAt}
-                    </Text>
-                </Text>
+                            <Text style={styles.infoItemLabel}>
+                                {currentUserInfo.createdAt}
+                            </Text>
+                        </Text>
+                    </View>
+                ) : []}
                 <View style={styles.buttonGroup}>
                     <Button
                         onPress={() => navigation.navigate("EditUserInfo")}

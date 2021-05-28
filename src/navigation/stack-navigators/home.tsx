@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import HomeScreen from '../../screens/home/home';
 import Profile from "../../screens/profile/profile";
 import ParamedicAddress from "../../screens/paramedicAddress/paramedicAddress";
+import Emergency from '../../screens/emergency/emergency';
 import Logout from "../../screens/logout/logout";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -37,6 +38,8 @@ function HomeStackNavigator() {
                 keyboardHidesTabBar: true,
             }}
         >
+
+            {/** Home */}
             <Tab.Screen
                 name={'Home'}
                 component={HomeScreen}
@@ -52,6 +55,8 @@ function HomeStackNavigator() {
                     unmountOnBlur: true
                 }}
             />
+
+            {/** Profile */}
             <Tab.Screen
                 name="Profile"
                 component={Profile}
@@ -67,6 +72,8 @@ function HomeStackNavigator() {
                     unmountOnBlur: true
                 }}
             />
+
+            {/** ParamedicAddress */}
             {isParamedic ? (
                 <Tab.Screen
                     name="ParamedicAddress"
@@ -84,6 +91,25 @@ function HomeStackNavigator() {
                     }}
                 />
             ) : []}
+
+            {/** Emergency */}
+            <Tab.Screen
+                name="Emergency"
+                component={Emergency}
+                options={{
+                    tabBarLabel: "Emergency",
+                    tabBarIcon: ({ color, size }) => (
+                        <FontAwesome
+                            name="exclamation-triangle"
+                            color={color}
+                            size={size}
+                        />
+                    ),
+                    unmountOnBlur: true
+                }}
+            />
+
+            {/** Logout */}
             <Tab.Screen
                 name="Logout"
                 component={Logout}

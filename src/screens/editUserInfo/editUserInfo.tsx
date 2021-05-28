@@ -192,6 +192,4 @@ function EditUserInfo({ navigation }: Props) {
     );
 };
 
-
-
 export default EditUserInfo;
