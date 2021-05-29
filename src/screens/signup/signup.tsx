@@ -22,6 +22,7 @@ import {
 } from '../../components';
 import { signup } from '../../api';
 import User from "../../context/user";
+import messaging from '@react-native-firebase/messaging';
 
 // type checking.
 interface Props {
@@ -33,6 +34,7 @@ interface FormData {
     phoneNumber: string;
     password: string;
     userType: string;
+    deviceToken: string;
 };
 
 function SignupScreen({ navigation }: Props) {
@@ -119,9 +121,12 @@ function SignupScreen({ navigation }: Props) {
     /**
      * Handle submit the form result.
      */
-    const onSubmit = (payload: FormData) => {
+    const onSubmit = async (payload: FormData) => {
         setloading(true);
         payload.userType = userType;
+        // get fcm token.
+        const token = await messaging().getToken();
+        payload.deviceToken = token;
         signup(payload).then((response) => {
             setloading(false);
             if (response.kind !== 'OK') {

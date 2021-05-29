@@ -28,6 +28,7 @@ interface Props {
 interface FormData {
     username: string;
     password: string;
+    deviceToken: string;
 };
 
 function LoginScreen({ navigation }: Props) {
@@ -57,6 +58,7 @@ function LoginScreen({ navigation }: Props) {
         () => {
             register('username');
             register('password');
+            register('deviceToken');
 
             return function () {
                 unregister('username');
@@ -73,9 +75,8 @@ function LoginScreen({ navigation }: Props) {
         setloading(true);
 
         // get fcm token.
-        const token = await messaging().getToken()
-        console.log('t is', token);
-
+        const token = await messaging().getToken();
+        payload.deviceToken = token;
         login(payload).then((response) => {
             setloading(false);
             if (response.kind !== 'OK') {
