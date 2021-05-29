@@ -17,10 +17,9 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { login } from "../../api";
-import {
-    Loader
-} from '../../components';
+import { Loader } from '../../components';
 import User from "../../context/user";
+import messaging from '@react-native-firebase/messaging';
 
 // type checking.
 interface Props {
@@ -58,6 +57,11 @@ function LoginScreen({ navigation }: Props) {
         () => {
             register('username');
             register('password');
+
+            return function () {
+                unregister('username');
+                unregister('password');
+            }
         },
         []
     );
@@ -65,8 +69,13 @@ function LoginScreen({ navigation }: Props) {
     /**
      * Handle submit the form result.
      */
-    const onSubmit = (payload: FormData) => {
+    const onSubmit = async (payload: FormData) => {
         setloading(true);
+
+        // get fcm token.
+        const token = await messaging().getToken()
+        console.log('t is', token);
+
         login(payload).then((response) => {
             setloading(false);
             if (response.kind !== 'OK') {

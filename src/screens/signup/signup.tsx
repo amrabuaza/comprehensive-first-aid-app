@@ -20,8 +20,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import {
     Loader
 } from '../../components';
-import DocumentPicker from 'react-native-document-picker';
-import { DocumentPickerResponse } from 'react-native-document-picker';
 import { signup } from '../../api';
 import User from "../../context/user";
 
@@ -59,34 +57,34 @@ function SignupScreen({ navigation }: Props) {
      * Select file form mobile
      */
     const selectFile = async () => {
-        // Opening Document Picker to select one file
-        try {
-            const res = await DocumentPicker.pick({
-                // Provide which type of file you want user to pick
-                type: [DocumentPicker.types.pdf],
-                // There can me more options as well
-                // DocumentPicker.types.allFiles
-                // DocumentPicker.types.images
-                // DocumentPicker.types.plainText
-                // DocumentPicker.types.audio
-                // DocumentPicker.types.pdf
-            });
-            // Printing the log realted to the file
-            console.log('res : ' + JSON.stringify(res));
-            // Setting the state to show single file attributes
-            //setCertificate(res);
-        } catch (err) {
-            setCertificate(null);
-            // Handling any exception (If any)
-            if (DocumentPicker.isCancel(err)) {
-                // If user canceled the document selection
-                alert('Canceled');
-            } else {
-                // For Unknown Error
-                alert('Unknown Error: ' + JSON.stringify(err));
-                throw err;
-            }
-        }
+        // // Opening Document Picker to select one file
+        // try {
+        //     const res = await DocumentPicker.pick({
+        //         // Provide which type of file you want user to pick
+        //         type: [DocumentPicker.types.pdf],
+        //         // There can me more options as well
+        //         // DocumentPicker.types.allFiles
+        //         // DocumentPicker.types.images
+        //         // DocumentPicker.types.plainText
+        //         // DocumentPicker.types.audio
+        //         // DocumentPicker.types.pdf
+        //     });
+        //     // Printing the log realted to the file
+        //     console.log('res : ' + JSON.stringify(res));
+        //     // Setting the state to show single file attributes
+        //     //setCertificate(res);
+        // } catch (err) {
+        //     setCertificate(null);
+        //     // Handling any exception (If any)
+        //     if (DocumentPicker.isCancel(err)) {
+        //         // If user canceled the document selection
+        //         alert('Canceled');
+        //     } else {
+        //         // For Unknown Error
+        //         alert('Unknown Error: ' + JSON.stringify(err));
+        //         throw err;
+        //     }
+        // }
     };
 
     // use react hook form.
