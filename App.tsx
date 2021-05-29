@@ -2,15 +2,24 @@ import React, { useEffect, useState } from 'react';
 import MainNavigation from './src/navigation/main-navigation';
 import User from "./src/context/user";
 import * as Location from 'expo-location';
-import * as Application from 'expo-application';
 import * as Font from 'expo-font';
 import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 
 export default function App() {
 
   // state.
   const [isSetupCompleted, setIsSetupCompleted] = useState(false);
 
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      // DO YOUR LOGIC.
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+  
   /**
    * On load app check location permissions if not granted
    * need to ask user to geant permissions
